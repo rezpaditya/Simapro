@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_lokasi"
+            android:icon="@drawable/ic_menu_lokasi"
+            android:title="Lokasi" />
+        <item
+            android:id="@+id/nav_tanah"
+            android:icon="@drawable/ic_menu_aset"
+            android:title="Tanah" />
+        <item
+            android:id="@+id/nav_wisma"
+            android:icon="@drawable/ic_menu_wisma"
+            android:title="Wisma" />
+        <item
+            android:id="@+id/nav_gudang"
+            android:icon="@drawable/ic_menu_gedung"
+            android:title="Gudang" />
+        <item
+            android:id="@+id/nav_kantor"
+            android:icon="@drawable/ic_menu_kantor"
+            android:title="Kantor" />
+    </group>
+
+    <!--<item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>-->
+
+</menu>
