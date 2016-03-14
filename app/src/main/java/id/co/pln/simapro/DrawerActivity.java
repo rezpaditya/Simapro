@@ -41,6 +41,19 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -48,7 +61,8 @@ public class DrawerActivity extends AppCompatActivity
         LocationListener,
         OnMapReadyCallback,
         GoogleMap.OnMarkerDragListener,
-        GoogleMap.OnMapLongClickListener {
+        GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
@@ -56,6 +70,14 @@ public class DrawerActivity extends AppCompatActivity
     private static AlertDialog alert;
     private LocationRequest mLocationRequest;
     private Marker marker;
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private ActionBarDrawerToggle toggle;
+    boolean canAddItem = false;
+
+    private OkHttpClient okHttpClient;
+
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
 
     private static final int MILLISECONDS_PER_SECOND = 1000;
 
@@ -74,7 +96,12 @@ public class DrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //create okhttp client
+        okHttpClient = new OkHttpClient();
+
         marker = null;
+        slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        slidingUpPanelLayout.setTouchEnabled(false);
 
         FloatingActionButton cur_loc = (FloatingActionButton) findViewById(R.id.my_location);
         cur_loc.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +112,7 @@ public class DrawerActivity extends AppCompatActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -132,6 +159,20 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(canAddItem) {
+            //untuk menampilkan tombol kirim pada action bar
+            this.getMenuInflater().inflate(R.menu.input_lokasi, menu);
+            canAddItem = false;
+        }else{
+            //untuk menghapus tombol kirim pada action bar
+            menu.removeItem(1);
+            canAddItem = true;
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -139,10 +180,17 @@ public class DrawerActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        //untuk mengahandle ketika tombol kirim ditekan
+        if (id == R.id.action_kirim) {
+            try {
+                doPost();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            /*Toast.makeText(this, "joss",
+                    Toast.LENGTH_LONG).show();*/
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -171,6 +219,8 @@ public class DrawerActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
+        mMap.setOnMarkerDragListener(this);
+        mMap.setOnInfoWindowClickListener(this);
        /* Snackbar.make(this, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
     }
@@ -183,21 +233,6 @@ public class DrawerActivity extends AppCompatActivity
             currentLongitude = location.getLongitude();
 
             LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-            if (marker == null) {
-                marker = mMap.addMarker(new MarkerOptions().
-                        position(latLng).
-                        title("Anda di Sini").
-                        draggable(true));
-            } else {
-                marker.remove();
-                marker = mMap.addMarker(new MarkerOptions().
-                        position(latLng).
-                        title("Anda di Sini").
-                        draggable(true));
-            }
-
-            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_icon));
-            mMap.setOnMarkerDragListener(this);
 
             CameraPosition cameraPosition = new CameraPosition.Builder().
                     target(latLng).
@@ -281,14 +316,59 @@ public class DrawerActivity extends AppCompatActivity
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        if(marker != null) {
+        if (marker == null) {
+            marker = mMap.addMarker(new MarkerOptions().
+                    position(latLng).
+                    title("Ambil Lokasi").
+                    draggable(true));
+        } else {
             marker.remove();
             marker = mMap.addMarker(new MarkerOptions().
                     position(latLng).
-                    title("Anda di Sini").
+                    title("Ambil Lokasi").
                     draggable(true));
-            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_icon));
         }
+        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_icon));
+    }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //untuk menambah item kirim pada action bar
+        canAddItem = true;
+        invalidateOptionsMenu();
+        //memunculkan panel input lokasi
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+        //mengganti toggle drawer menjadi home up button
+        toggle.setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //listener untuk home up button
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                toggle.setDrawerIndicatorEnabled(true);
+                invalidateOptionsMenu();
+            }
+        });
+    }
+
+    protected void doPost() throws Exception{
+        String url = "http://google.com";
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("response", response.body().string());
+            }
+        });
     }
 }

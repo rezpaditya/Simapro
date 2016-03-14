@@ -12,37 +12,221 @@
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:gravity="bottom"
-        sothree:umanoPanelHeight="68dp">
+        sothree:umanoPanelHeight="0dp">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="id.co.pln.simapro.MapsActivity" />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/fab_margin">
+            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="id.co.pln.simapro.MapsActivity" />
 
-            <EditText
-                android:padding="10dp"
-                android:inputType="textEmailAddress"
-                android:drawableLeft="@drawable/ic_setting_dark"
-                android:hint="Your Email"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/background_card"
-                android:id="@+id/email"
-                android:layout_width="fill_parent"
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|top" />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="75dp">
 
-        </LinearLayout>
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/my_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_padding"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_center_direction"
+                    app:backgroundTint="@android:color/white" />
+            </FrameLayout>
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <android.support.design.widget.TextInputLayout
+                    android:focusableInTouchMode="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_nama_lokasi"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nama Lokasi"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_alamat"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Alamat"
+                        android:inputType="textMultiLine"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_prov"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Provinsi"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_kab"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Kabupaten"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_kec"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Kecamatan"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_lt_lg"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Latitude"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_lt_lg"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Longitude"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+        </ScrollView>
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-
 </RelativeLayout>
