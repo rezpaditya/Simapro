@@ -53,19 +53,52 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
+                <Spinner
+                    android:id="@+id/unit_pln"
+                    android:layout_marginTop="4dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit" />
+                <View
+                    android:layout_marginRight="@dimen/input_padding"
+                    android:layout_marginLeft="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+                <Spinner
+                    android:id="@+id/area_pln"
+                    android:layout_marginTop="4dp"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit"/>
+                <View
+                    android:layout_marginRight="@dimen/input_padding"
+                    android:layout_marginLeft="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+
                 <android.support.design.widget.TextInputLayout
-                    android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_nama_lokasi"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_nama_lokasi"
                         android:paddingTop="@dimen/input_padding"
@@ -90,6 +123,7 @@
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_alamat"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_alamat"
                         android:paddingTop="@dimen/input_padding"
@@ -114,6 +148,7 @@
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_provinsi"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_prov"
                         android:paddingTop="@dimen/input_padding"
@@ -138,6 +173,7 @@
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_kabupaten"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_kab"
                         android:paddingTop="@dimen/input_padding"
@@ -162,6 +198,7 @@
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_kecamatan"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_kec"
                         android:paddingTop="@dimen/input_padding"
@@ -186,6 +223,32 @@
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_kodepos"
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_kec"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="kodepos"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:id="@+id/input_latitude"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_lt_lg"
                         android:paddingTop="@dimen/input_padding"
@@ -210,6 +273,7 @@
                     android:padding="@dimen/input_padding">
 
                     <EditText
+                        android:id="@+id/input_longitude"
                         android:drawablePadding="@dimen/input_padding"
                         android:drawableLeft="@drawable/ic_input_lt_lg"
                         android:paddingTop="@dimen/input_padding"
@@ -217,6 +281,31 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Longitude"
+                        android:singleLine="true"
+                        android:background="@android:color/transparent"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="#ffe2e2e2" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:padding="@dimen/input_padding">
+
+                    <EditText
+                        android:id="@+id/input_altitude"
+                        android:drawablePadding="@dimen/input_padding"
+                        android:drawableLeft="@drawable/ic_input_lt_lg"
+                        android:paddingTop="@dimen/input_padding"
+                        android:paddingBottom="@dimen/input_padding"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Altitude"
                         android:singleLine="true"
                         android:background="@android:color/transparent"/>
 

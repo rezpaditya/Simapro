@@ -8,4 +8,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string-array name="unit">
+        <item>-</item>
+        <item>Jakarta</item>
+        <item>Banten</item>
+    </string-array>
 </resources>
