@@ -1,9 +1,8 @@
-package id.co.pln.simapro;
+package id.co.pln.simapro.activity;
 
-import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,8 +10,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +34,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -45,30 +41,23 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
+import id.co.pln.simapro.Area;
+import id.co.pln.simapro.R;
+import id.co.pln.simapro.Unit;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -77,7 +66,7 @@ import okhttp3.Response;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DrawerActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -99,17 +88,13 @@ public class DrawerActivity extends AppCompatActivity
     private ActionBarDrawerToggle toggle;
     boolean canAddItem = false;
 
-    //untuk spinner unit
+    //untuk spinner unit & area
     ArrayList<Unit> list_unit;
     ArrayList<Area> list_area;
     ArrayAdapter unit_adapter, area_adapter;
 
     private final OkHttpClient okHttpClient = new OkHttpClient();
-
-    private final Gson gson = new Gson();
-
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+    private ProgressDialog pDialog;
 
     private static final int MILLISECONDS_PER_SECOND = 1000;
 
@@ -155,18 +140,12 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawer);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //bind variable using butterknife
         ButterKnife.bind(this);
-
-        try {
-            runOkhttp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         list_unit = new ArrayList<>();
         unit_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list_unit);
@@ -225,12 +204,21 @@ public class DrawerActivity extends AppCompatActivity
 
     }
 
+    public void collapsePanel(){
+        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toggle.setDrawerIndicatorEnabled(true);
+        invalidateOptionsMenu();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(slidingUpPanelLayout.isShown()){
+            collapsePanel();
+        } else{
             super.onBackPressed();
         }
     }
@@ -258,23 +246,30 @@ public class DrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         //untuk mengahandle ketika tombol kirim ditekan
         if (id == R.id.action_kirim) {
             nama_lokasi = input_nama_lokasi.getText().toString();
             try {
-                runOkhttp3(id_area, nama_lokasi, alamat, provinsi, kabupaten, kecamatan,
-                        kodepos, latitude, longitude, altitude, "admin_ojt");
+                RequestBody formBody = new FormBody.Builder()
+                        .add("id_area", id_area)
+                        .add("nama_lokasi", nama_lokasi)
+                        .add("alamat_lokasi", alamat)
+                        .add("propinsi", provinsi)
+                        .add("kabupaten", kabupaten)
+                        .add("kecamatan", kecamatan)
+                        .add("kodepos", kodepos)
+                        .add("longitude", longitude)
+                        .add("latitude", latitude)
+                        .add("altitude", altitude)
+                        .add("nm_user", "admin_ojt")
+                        .build();
+                runOkhttpPost("url", formBody);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            /*Toast.makeText(this, "joss",
-                    .LENGTH_LONG).show();*/
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -286,15 +281,17 @@ public class DrawerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       /* if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_lokasi) {
+            collapsePanel();
+        } else if (id == R.id.nav_tanah) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_wisma) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_gudang) {
 
-        }*/
+        }else if (id == R.id.nav_kantor) {
+
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -472,6 +469,13 @@ public class DrawerActivity extends AppCompatActivity
         canAddItem = true;
         invalidateOptionsMenu();
 
+        //get data unit
+        try {
+            runOkhttp();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //memunculkan panel input lokasi
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
 
@@ -512,10 +516,7 @@ public class DrawerActivity extends AppCompatActivity
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                toggle.setDrawerIndicatorEnabled(true);
-                invalidateOptionsMenu();
+                collapsePanel();
             }
         });
     }
@@ -528,7 +529,7 @@ public class DrawerActivity extends AppCompatActivity
                 area_pln.setVisibility(View.VISIBLE);
                 list_area.clear();
                 try {
-                    runOkhttp2(unit.getID_UNIT());
+                    runOkhttpGet("http://10.1.36.182:8008/simapro2/get_area_by_unit.php/?id_unit=" + unit.getID_UNIT());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -548,10 +549,16 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     protected void runOkhttp() throws Exception {
-        String url = "http://10.1.36.193:8008/simapro2/get_all_unit.php";
+        String url = "http://10.1.36.182:8008/simapro2/get_all_unit.php";
         Request request = new Request.Builder()
                 .url(url)
                 .build();
+
+        pDialog = new ProgressDialog(MainActivity.this);
+        pDialog.setMessage("Please wait...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(true);
+        pDialog.show();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -585,17 +592,23 @@ public class DrawerActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         unit_adapter.notifyDataSetChanged();
+                        pDialog.dismiss();
                     }
                 });
             }
         });
     }
 
-    protected void runOkhttp2(String id_unit) throws Exception {
-        String url = "http://10.1.36.193:8008/simapro2/get_area_by_unit.php/?id_unit=" + id_unit;
+    protected void runOkhttpGet(String url) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
+
+        pDialog = new ProgressDialog(MainActivity.this);
+        pDialog.setMessage("Please wait...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(true);
+        pDialog.show();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -629,35 +642,25 @@ public class DrawerActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         area_adapter.notifyDataSetChanged();
+                        pDialog.dismiss();
                     }
                 });
             }
         });
     }
 
-    protected void runOkhttp3( String id_area, String nama_lokasi, String alamat_lokasi, String propinsi,
-                               String kabupaten, String kecamatan, String kodepos, String longitude, String latitude,
-                               String altitude, String nm_user) throws Exception {
-        String url = "http://10.1.36.193:8008/simapro2/input_lokasi.php";
-        RequestBody formBody = new FormBody.Builder()
-                .add("id_area", id_area)
-                .add("nama_lokasi", nama_lokasi)
-                .add("alamat_lokasi", alamat_lokasi)
-                .add("propinsi", propinsi)
-                .add("kabupaten", kabupaten)
-                .add("kecamatan", kecamatan)
-                .add("kodepos", kodepos)
-                .add("longitude", longitude)
-                .add("latitude", latitude)
-                .add("altitude", altitude)
-                //.add("keterangan", keterangan)
-                .add("nm_user", nm_user)
-                .build();
+    protected void runOkhttpPost( String url, RequestBody formBody) throws Exception {
 
         Request request = new Request.Builder()
                 .url(url)
                 .post(formBody)
                 .build();
+
+        pDialog = new ProgressDialog(MainActivity.this);
+        pDialog.setMessage("Please wait...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(true);
+        pDialog.show();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -669,6 +672,18 @@ public class DrawerActivity extends AppCompatActivity
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                 Log.d("response", "input berhasil");
+
+                //wait until form has been poested then update the view
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pDialog.dismiss();
+                        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                        toggle.setDrawerIndicatorEnabled(true);
+                        invalidateOptionsMenu();
+                    }
+                });
             }
         });
     }

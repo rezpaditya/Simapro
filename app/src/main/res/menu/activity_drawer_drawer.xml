@@ -3,6 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:checked="true"
             android:id="@+id/nav_lokasi"
             android:icon="@drawable/ic_menu_lokasi"
             android:title="Lokasi" />
