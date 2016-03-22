@@ -3,13 +3,16 @@ package id.co.pln.simapro.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -49,12 +52,19 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.datatype.Duration;
+
 import id.co.pln.simapro.Area;
+import id.co.pln.simapro.Config;
 import id.co.pln.simapro.R;
 import id.co.pln.simapro.Unit;
+import id.co.pln.simapro.helper.DatabaseConnector;
+import id.co.pln.simapro.helper.SessionManager;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -77,6 +87,8 @@ public class MainActivity extends AppCompatActivity
         GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapClickListener, AdapterView.OnItemSelectedListener {
 
+    private SessionManager sessionManager;
+
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private LocationManager locationManager;
@@ -87,13 +99,15 @@ public class MainActivity extends AppCompatActivity
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ActionBarDrawerToggle toggle;
     boolean canAddItem = false;
+    boolean isCollapsed = true;
 
     //untuk spinner unit & area
     ArrayList<Unit> list_unit;
     ArrayList<Area> list_area;
     ArrayAdapter unit_adapter, area_adapter;
 
-    private final OkHttpClient okHttpClient = new OkHttpClient();
+    private OkHttpClient okHttpClient = new OkHttpClient();
+
     private ProgressDialog pDialog;
 
     private static final int MILLISECONDS_PER_SECOND = 1000;
@@ -105,6 +119,8 @@ public class MainActivity extends AppCompatActivity
     private static final int FASTEST_INTERVAL_IN_SECONDS = 1;
     private static final long FASTEST_INTERVAL =
             MILLISECONDS_PER_SECOND * FASTEST_INTERVAL_IN_SECONDS;
+
+    DatabaseConnector databaseConnector;
 
     /*
     * Variable untuk input lokasi
@@ -123,18 +139,29 @@ public class MainActivity extends AppCompatActivity
     /*
     * Variable of the view using butterknife library
     * */
-    @Bind(R.id.unit_pln) Spinner unit_pln;
-    @Bind(R.id.area_pln) Spinner area_pln;
+    @Bind(R.id.unit_pln)
+    Spinner unit_pln;
+    @Bind(R.id.area_pln)
+    Spinner area_pln;
 
-    @Bind(R.id.input_nama_lokasi) EditText input_nama_lokasi;
-    @Bind(R.id.input_alamat) EditText input_alamat;
-    @Bind(R.id.input_provinsi) EditText input_provinsi;
-    @Bind(R.id.input_kabupaten) EditText input_kabupaten;
-    @Bind(R.id.input_kecamatan) EditText input_kecamatan;
-    @Bind(R.id.input_latitude) EditText input_latitude;
-    @Bind(R.id.input_longitude) EditText input_longitude;
-    @Bind(R.id.input_altitude) EditText input_altitude;
-    @Bind(R.id.input_kodepos) EditText input_kodepos;
+    @Bind(R.id.input_nama_lokasi)
+    EditText input_nama_lokasi;
+    @Bind(R.id.input_alamat)
+    EditText input_alamat;
+    @Bind(R.id.input_provinsi)
+    EditText input_provinsi;
+    @Bind(R.id.input_kabupaten)
+    EditText input_kabupaten;
+    @Bind(R.id.input_kecamatan)
+    EditText input_kecamatan;
+    @Bind(R.id.input_latitude)
+    EditText input_latitude;
+    @Bind(R.id.input_longitude)
+    EditText input_longitude;
+    @Bind(R.id.input_altitude)
+    EditText input_altitude;
+    @Bind(R.id.input_kodepos)
+    EditText input_kodepos;
 
 
     @Override
@@ -146,6 +173,20 @@ public class MainActivity extends AppCompatActivity
 
         //bind variable using butterknife
         ButterKnife.bind(this);
+
+        sessionManager = new SessionManager(this);
+
+        if(!sessionManager.checkLogin()){
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
+
+        HashMap<String, String> user = sessionManager.getUserDetails();
+        Log.d("id user at home", user.get(SessionManager.NM_USER));
+
+        databaseConnector = new DatabaseConnector(MainActivity.this);
 
         list_unit = new ArrayList<>();
         unit_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, list_unit);
@@ -204,11 +245,23 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void collapsePanel(){
+    public void collapsePanel() {
+        //set field to null
+        input_nama_lokasi.setText("");
+        input_alamat.setText("");
+        input_provinsi.setText("");
+        input_kabupaten.setText("");
+        input_kecamatan.setText("");
+        input_kodepos.setText("");
+        input_latitude.setText("");
+        input_longitude.setText("");
+        input_altitude.setText("");
+
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(true);
         invalidateOptionsMenu();
+        isCollapsed = true;
     }
 
     @Override
@@ -216,10 +269,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(slidingUpPanelLayout.isShown()){
+            Log.d("onBackPress", "drawer close");
+        } else if (!isCollapsed) {
             collapsePanel();
-        } else{
+            Log.d("onBackPress", "collapse panel");
+        } else {
             super.onBackPressed();
+            Log.d("onBackPress", "close");
         }
     }
 
@@ -265,7 +321,7 @@ public class MainActivity extends AppCompatActivity
                         .add("altitude", altitude)
                         .add("nm_user", "admin_ojt")
                         .build();
-                runOkhttpPost("url", formBody);
+                postLokasi(Config.INPUT_LOKASI, formBody);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -289,8 +345,14 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_gudang) {
 
-        }else if (id == R.id.nav_kantor) {
+        } else if (id == R.id.nav_kantor) {
 
+        } else if (id == R.id.nav_logout) {
+            sessionManager.logoutUser();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -435,8 +497,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        Toast.makeText(this, "Latitude: " + marker.getPosition().latitude + " Longitude: " + marker.getPosition().longitude,
-                Toast.LENGTH_LONG).show();
+        /*Toast.makeText(this, "Latitude: " + marker.getPosition().latitude + "\nLongitude: " + marker.getPosition().longitude,
+                Toast.LENGTH_LONG).show();*/
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout, "Latitude: " + marker.getPosition().latitude + " Longitude: " + marker.getPosition().longitude, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     @Override
@@ -469,44 +534,9 @@ public class MainActivity extends AppCompatActivity
         canAddItem = true;
         invalidateOptionsMenu();
 
-        //get data unit
-        try {
-            runOkhttp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         //memunculkan panel input lokasi
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-
-        //set nilai latitude, langitude dan altidude
-        latitude = Double.toString(marker.getPosition().latitude);
-        longitude = Double.toString(marker.getPosition().longitude);
-
-        //set nilai provinsi, kabupaten dll
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            addresses = geocoder.getFromLocation(marker.getPosition().latitude, marker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            alamat = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            provinsi = addresses.get(0).getAdminArea();
-            kabupaten = addresses.get(0).getSubAdminArea();
-            kecamatan = addresses.get(0).getSubLocality();
-            kodepos = addresses.get(0).getPostalCode();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //apply nilai ke dalam edittext
-        input_alamat.setText(alamat);
-        input_provinsi.setText(provinsi);
-        input_kabupaten.setText(kabupaten);
-        input_kecamatan.setText(kecamatan);
-        input_kodepos.setText(kodepos);
-        input_latitude.setText(latitude);
-        input_longitude.setText(longitude);
-        input_altitude.setText(altitude);
+        isCollapsed = false;
 
         //mengganti toggle drawer menjadi home up button
         toggle.setDrawerIndicatorEnabled(false);
@@ -519,17 +549,68 @@ public class MainActivity extends AppCompatActivity
                 collapsePanel();
             }
         });
+
+        //get data unit
+        try {
+            getALlUnit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //set nilai latitude, langitude dan altidude
+        latitude = Double.toString(marker.getPosition().latitude);
+        longitude = Double.toString(marker.getPosition().longitude);
+
+        final Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        new AsyncTask<Void, Void, Void>() {
+            List<Address> addresses;
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    if(geocoder != null) {
+                        addresses = geocoder.getFromLocation(Double.valueOf(latitude), Double.valueOf(longitude), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+                if(addresses != null) {
+                    alamat = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    provinsi = addresses.get(0).getAdminArea();
+                    kabupaten = addresses.get(0).getSubAdminArea();
+                    kecamatan = addresses.get(0).getSubLocality();
+                    kodepos = addresses.get(0).getPostalCode();
+                }
+            }
+        }.execute();
+
+
+        //apply nilai ke dalam edittext
+        input_alamat.setText(alamat);
+        input_provinsi.setText(provinsi);
+        input_kabupaten.setText(kabupaten);
+        input_kecamatan.setText(kecamatan);
+        input_kodepos.setText(kodepos);
+        input_latitude.setText(latitude);
+        input_longitude.setText(longitude);
+        input_altitude.setText(altitude);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch(parent.getId()){
+        switch (parent.getId()) {
             case R.id.unit_pln:
                 Unit unit = (Unit) unit_pln.getSelectedItem();
                 area_pln.setVisibility(View.VISIBLE);
                 list_area.clear();
                 try {
-                    runOkhttpGet("http://10.1.36.182:8008/simapro2/get_area_by_unit.php/?id_unit=" + unit.getID_UNIT());
+                    getAreaByUnit(unit.getID_UNIT());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -548,8 +629,25 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    protected void runOkhttp() throws Exception {
-        String url = "http://10.1.36.182:8008/simapro2/get_all_unit.php";
+    //get all unit
+    protected void getALlUnit() throws Exception {
+        databaseConnector.open();
+        Cursor cursor = databaseConnector.getALlUnit();
+        if (cursor.moveToFirst()){
+            do{
+                Unit unit = new Unit();
+                unit.setID_UNIT(cursor.getString(cursor.getColumnIndex("id_unit")));   //hanya mengambil id dan nama unit saja
+                unit.setNM_UNIT(cursor.getString(cursor.getColumnIndex("nm_unit")));
+                list_unit.add(unit);
+                Log.d("cursor item", "added to list");
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        databaseConnector.close();
+
+        unit_adapter.notifyDataSetChanged();
+
+        /*String url = Config.GET_ALL_UNIT;
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -563,6 +661,15 @@ public class MainActivity extends AppCompatActivity
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                //wait until list has been updated then update the spinner
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pDialog.dismiss();
+                        collapsePanel();
+                        Toast.makeText(MainActivity.this, "Koneksi ke server gagal!", Toast.LENGTH_LONG).show();
+                    }
+                });
                 e.printStackTrace();
             }
 
@@ -596,11 +703,30 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
             }
-        });
+
+
+        });*/
     }
 
-    protected void runOkhttpGet(String url) throws Exception {
-        Request request = new Request.Builder()
+    //get all area by unit id
+    protected void getAreaByUnit(String id) throws Exception {
+        databaseConnector.open();
+        Cursor cursor = databaseConnector.getAreaByUnit(id);
+        if (cursor.moveToFirst()){
+            do{
+                Area area = new Area();
+                area.setID_BURSARE_UNITP(cursor.getString(cursor.getColumnIndex("id_bursare_unitp")));
+                area.setNM_UNITP(cursor.getString(cursor.getColumnIndex("nm_unitp")));
+                list_area.add(area);
+
+                Log.d("cursor item", "added to list");
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        databaseConnector.close();
+
+        area_adapter.notifyDataSetChanged();
+        /*Request request = new Request.Builder()
                 .url(url)
                 .build();
 
@@ -613,6 +739,14 @@ public class MainActivity extends AppCompatActivity
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pDialog.dismiss();
+                        collapsePanel();
+                        Toast.makeText(MainActivity.this, "Koneksi ke server gagal!", Toast.LENGTH_LONG).show();
+                    }
+                });
                 e.printStackTrace();
             }
 
@@ -646,10 +780,11 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
             }
-        });
+        });*/
     }
 
-    protected void runOkhttpPost( String url, RequestBody formBody) throws Exception {
+    //input lokasi
+    protected void postLokasi(String url, RequestBody formBody) throws Exception {
 
         Request request = new Request.Builder()
                 .url(url)
@@ -665,6 +800,7 @@ public class MainActivity extends AppCompatActivity
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Toast.makeText(MainActivity.this, "Koneksi ke server gagal!", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -678,10 +814,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         pDialog.dismiss();
-                        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                        toggle.setDrawerIndicatorEnabled(true);
-                        invalidateOptionsMenu();
+                        collapsePanel();
                     }
                 });
             }

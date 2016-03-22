@@ -4,8 +4,26 @@ package id.co.pln.simapro;
  * Created by Rezpa Aditya on 3/16/2016.
  */
 public class Area {
+    String ID_UNITP;
     String ID_BURSARE_UNITP;
     String NM_UNITP;
+    String ID_UNIT_UNITP;
+
+    public String getID_UNITP() {
+        return ID_UNITP;
+    }
+
+    public void setID_UNITP(String ID_UNITP) {
+        this.ID_UNITP = ID_UNITP;
+    }
+
+    public String getID_UNIT_UNITP() {
+        return ID_UNIT_UNITP;
+    }
+
+    public void setID_UNIT_UNITP(String ID_UNIT_UNITP) {
+        this.ID_UNIT_UNITP = ID_UNIT_UNITP;
+    }
 
     public String getID_BURSARE_UNITP() {
         return ID_BURSARE_UNITP;

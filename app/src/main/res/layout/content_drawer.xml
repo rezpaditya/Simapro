@@ -29,12 +29,22 @@
                 android:layout_height="match_parent"
                 tools:context="id.co.pln.simapro.MapsActivity" />
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:paddingBottom="75dp">
+                android:paddingBottom="75dp"
+                android:orientation="vertical">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/lokasi_aset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/fab_padding"
+                    android:scaleType="center"
+                    android:src="@android:drawable/ic_dialog_email"
+                    app:backgroundTint="@android:color/holo_blue_light" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/my_location"
@@ -44,7 +54,7 @@
                     android:scaleType="center"
                     android:src="@drawable/ic_center_direction"
                     app:backgroundTint="@android:color/white" />
-            </FrameLayout>
+            </LinearLayout>
         </RelativeLayout>
 
         <ScrollView

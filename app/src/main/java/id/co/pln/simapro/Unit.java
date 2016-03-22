@@ -81,6 +81,6 @@ public class Unit {
     @Override
     public String toString()
     {
-        return( ID_UNIT + " " + NM_UNIT);
+        return(NM_UNIT);
     }
 }

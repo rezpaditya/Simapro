@@ -1,4 +1,4 @@
-package id.co.pln.simapro;
+package id.co.pln.simapro.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,11 +26,12 @@ public class SessionManager {
 
     // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
-    public static final String KEY_USERNAME = "username";
-    public static final String KEY_FULLNAME = "fullname";
-    public static final String KEY_STATUS = "status";
-    public static final String KEY_EMAIL = "email";
-    public static final String KEY_TOKEN = "token";
+    public static final String ID_USER = "id_user";
+    public static final String ID_UNIT_USER = "id_unit_user";
+    public static final String NM_USER = "nm_user";
+    public static final String STATUS_USER = "status_user";
+    public static final String ROLE_USER = "role_user";
+    public static final String EMAIL_USER = "email_user";
 
     // Constructor
     public SessionManager(Context context){
@@ -42,14 +43,20 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String username, String fullName, String email, String status, String token){
+    public void createLoginSession(String id_user,
+                                   String id_unit_user,
+                                   String nm_user,
+                                   String status_user,
+                                   String role_user,
+                                   String email_user){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
-        editor.putString(KEY_USERNAME, username);
-        editor.putString(KEY_FULLNAME, fullName);
-        editor.putString(KEY_STATUS, status);
-        editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_TOKEN, token);
+        editor.putString(ID_USER, id_user);
+        editor.putString(ID_UNIT_USER, id_unit_user);
+        editor.putString(NM_USER, nm_user);
+        editor.putString(STATUS_USER, status_user);
+        editor.putString(ROLE_USER, role_user);
+        editor.putString(EMAIL_USER, email_user);
         editor.commit();
     }
 
@@ -72,16 +79,17 @@ public class SessionManager {
 
         HashMap<String, String> user = new HashMap<String, String>();
 
-        user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
-        user.put(KEY_FULLNAME, pref.getString(KEY_FULLNAME, null));
-        user.put(KEY_STATUS, pref.getString(KEY_STATUS, null));
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-        user.put(KEY_TOKEN, pref.getString(KEY_TOKEN, null));
+        user.put(ID_USER, pref.getString(ID_USER, null));
+        user.put(ID_UNIT_USER, pref.getString(ID_UNIT_USER, null));
+        user.put(NM_USER, pref.getString(NM_USER, null));
+        user.put(STATUS_USER, pref.getString(STATUS_USER, null));
+        user.put(ROLE_USER, pref.getString(ROLE_USER, null));
+        user.put(EMAIL_USER, pref.getString(EMAIL_USER, null));
         return user;
     }
 
     public void changeStatus(String status){
-        editor.putString(KEY_STATUS, status);
+        editor.putString(STATUS_USER, status);
         editor.commit();
     }
 
@@ -92,11 +100,12 @@ public class SessionManager {
         // Clearing all data from Shared Preferences
         //editor.clear();
         editor.remove(IS_LOGIN);
-        editor.remove(KEY_USERNAME);
-        editor.remove(KEY_FULLNAME);
-        editor.remove(KEY_STATUS);
-        editor.remove(KEY_EMAIL);
-        editor.remove(KEY_TOKEN);
+        editor.remove(ID_USER);
+        editor.remove(ID_UNIT_USER);
+        editor.remove(NM_USER);
+        editor.remove(STATUS_USER);
+        editor.remove(ROLE_USER);
+        editor.remove(EMAIL_USER);
         editor.commit();
         return true;
     }
