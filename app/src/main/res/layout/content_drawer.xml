@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/fab_padding"
                     android:scaleType="center"
-                    android:src="@android:drawable/ic_dialog_email"
+                    android:src="@drawable/ic_map_eye"
                     app:backgroundTint="@android:color/holo_blue_light" />
 
                 <android.support.design.widget.FloatingActionButton

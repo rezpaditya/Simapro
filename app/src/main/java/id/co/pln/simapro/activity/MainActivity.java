@@ -56,6 +56,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.datatype.Duration;
 
@@ -163,6 +164,9 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.input_kodepos)
     EditText input_kodepos;
 
+    @Bind(R.id.lokasi_aset)
+    FloatingActionButton btn_show_lokasi;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity
 
         sessionManager = new SessionManager(this);
 
-        if(!sessionManager.checkLogin()){
+        if (!sessionManager.checkLogin()) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -206,8 +210,8 @@ public class MainActivity extends AppCompatActivity
         slidingUpPanelLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         slidingUpPanelLayout.setTouchEnabled(false);
 
-        FloatingActionButton cur_loc = (FloatingActionButton) findViewById(R.id.my_location);
-        cur_loc.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton btn_current_location = (FloatingActionButton) findViewById(R.id.my_location);
+        btn_current_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startLocationUpdates();
@@ -340,7 +344,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_lokasi) {
             collapsePanel();
         } else if (id == R.id.nav_tanah) {
-
+            Intent intent = new Intent(this, TanahActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_wisma) {
 
         } else if (id == R.id.nav_gudang) {
@@ -372,11 +377,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void latestLocation(Location location) {
-        double currentLatitude;
-        double currentLongitude;
         if (location != null) {
-            currentLatitude = location.getLatitude();
-            currentLongitude = location.getLongitude();
+            final double currentLatitude = location.getLatitude();
+            final double currentLongitude = location.getLongitude();
+
 
             LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
@@ -399,6 +403,13 @@ public class MainActivity extends AppCompatActivity
 
             //mengambil nilai altitude
             altitude = Double.toString(location.getAltitude());
+
+            btn_show_lokasi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getLokasiAset(currentLatitude, currentLongitude);
+                }
+            });
         }
     }
 
@@ -565,10 +576,11 @@ public class MainActivity extends AppCompatActivity
 
         new AsyncTask<Void, Void, Void>() {
             List<Address> addresses;
+
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    if(geocoder != null) {
+                    if (geocoder != null) {
                         addresses = geocoder.getFromLocation(Double.valueOf(latitude), Double.valueOf(longitude), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                     }
                 } catch (IOException e) {
@@ -580,7 +592,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
-                if(addresses != null) {
+                if (addresses != null) {
                     alamat = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     provinsi = addresses.get(0).getAdminArea();
                     kabupaten = addresses.get(0).getSubAdminArea();
@@ -633,14 +645,14 @@ public class MainActivity extends AppCompatActivity
     protected void getALlUnit() throws Exception {
         databaseConnector.open();
         Cursor cursor = databaseConnector.getALlUnit();
-        if (cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 Unit unit = new Unit();
                 unit.setID_UNIT(cursor.getString(cursor.getColumnIndex("id_unit")));   //hanya mengambil id dan nama unit saja
                 unit.setNM_UNIT(cursor.getString(cursor.getColumnIndex("nm_unit")));
                 list_unit.add(unit);
                 Log.d("cursor item", "added to list");
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         databaseConnector.close();
@@ -712,15 +724,15 @@ public class MainActivity extends AppCompatActivity
     protected void getAreaByUnit(String id) throws Exception {
         databaseConnector.open();
         Cursor cursor = databaseConnector.getAreaByUnit(id);
-        if (cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 Area area = new Area();
                 area.setID_BURSARE_UNITP(cursor.getString(cursor.getColumnIndex("id_bursare_unitp")));
                 area.setNM_UNITP(cursor.getString(cursor.getColumnIndex("nm_unitp")));
                 list_area.add(area);
 
                 Log.d("cursor item", "added to list");
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         cursor.close();
         databaseConnector.close();
@@ -781,6 +793,64 @@ public class MainActivity extends AppCompatActivity
                 });
             }
         });*/
+    }
+
+    //get lokasi aset
+    public void getLokasiAset(double Lat, double Long) {
+        Request request = new Request.Builder()
+                .url(Config.GET_LOKASI_SEKITAR + "latitude=" + Double.toString(Lat) + "&longitude=" + Double.toString(Long) + "&distance=5")
+                .build();
+
+        Log.d("url", Config.GET_LOKASI_SEKITAR + "latitude=" + Double.toString(Lat) + "&longitude=" + Double.toString(Long) + "&distance=5");
+
+        OkHttpClient copy = okHttpClient.newBuilder()
+                .readTimeout(999999999, TimeUnit.MILLISECONDS)
+                .build();
+
+        copy.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("lokasi sekitar", "gagal pak");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.d("lokasi sekitar", "dapat");
+
+                String jsonData = response.body().string();
+                JSONObject Jobject;
+                try {
+                    Jobject = new JSONObject(jsonData);
+                    Log.d("lokasi sekitar", "json object created");
+
+                    JSONArray Jarray = Jobject.getJSONArray("lokasi");
+                    Log.d("lokasi sekitar", "json array created");
+                    for (int i = 0; i < Jarray.length(); i++) {
+                        JSONObject object = Jarray.getJSONObject(i);
+
+                        final double currentLatitude = Double.valueOf(object.getString("LAT_LOKASI"));
+                        final double currentLongitude = Double.valueOf(object.getString("LONG_LOKASI"));
+                        final String nama_lokasi = object.getString("NM_LOKASI");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+                                marker = mMap.addMarker(new MarkerOptions().
+                                        position(latLng).
+                                        title(nama_lokasi).
+                                        draggable(true));
+                                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_lokasi));
+                            }
+                        });
+                        Log.d("lokasi sekitar", object.getString("NM_LOKASI"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     //input lokasi

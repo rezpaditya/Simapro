@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.TanahActivity"
+    tools:showIn="@layout/activity_tanah">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Lokasi Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/lokasi_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/nama_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Harga Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/harga_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Luas Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/luas_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Alamat Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/alamat_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Longitude Tanah"
+                    android:inputType="textMultiLine"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/longitude_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Latitude Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/latitude_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Altitude Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/altitude_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nomor PBB Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/pbb_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Biaya PBB Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/biaya_pbb_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nomor Sertifikat Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/no_sertifikat_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Periode Awal"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/periode_awal" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Periode Akhir"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/periode_akhir" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Status Operasi Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/status_operasi_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Status Kepemilikan Tanah"
+                    android:inputType="textMultiLine"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/status_kepemilikan_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Status Terjual Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/status_terjual_tanah" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

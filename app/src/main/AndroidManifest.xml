@@ -57,6 +57,20 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
+
+        <activity
+            android:name=".activity.TanahActivity"
+            android:label="Input Tanah" />
+        <activity
+            android:name=".activity.GudangActivity"
+            android:label="Input Gudang" />
+        <activity
+            android:name=".activity.WismaActivity"
+            android:label="Input Wisma" />
+        <activity
+            android:name=".activity.KantorActivity"
+            android:label="Input Kantor" />
+
     </application>
 
 </manifest>
