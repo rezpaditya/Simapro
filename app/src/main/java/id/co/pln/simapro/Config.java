@@ -18,5 +18,8 @@ public class Config {
     public static final String CEKLOGIN = HOSTNAME+ "cek_login.php";
     public static final String INPUT_LOKASI = HOSTNAME + "input_lokasi.php";
     public static final String INPUT_TANAH = HOSTNAME + "input_tanah.php";
+    public static final String INPUT_BANGUNAN = HOSTNAME + "input_bangunan.php";
+    public static final String INPUT_GUDANG = HOSTNAME + "input_gudang.php";
+    public static final String INPUT_WISMA = HOSTNAME + "input_wisma.php";
 
 }

@@ -9,8 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.GudangActivity"
-    tools:showIn="@layout/activity_gudang">
+    tools:context=".activity.BangunanActivity"
+    tools:showIn="@layout/activity_bangunan">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                     android:hint="Lokasi Tanah"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/lokasi_tanah_gudang" />
+                    android:id="@+id/lokasi_tanah_bangunan" />
 
                 <View
                     android:layout_width="match_parent"
@@ -60,10 +60,10 @@
                     android:paddingBottom="@dimen/input_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nama Gudang"
+                    android:hint="Nama Bangunan"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/nama_gudang" />
+                    android:id="@+id/nama_bangunan" />
 
                 <View
                     android:layout_width="match_parent"
@@ -84,10 +84,10 @@
                     android:paddingBottom="@dimen/input_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Harga Gudang"
+                    android:hint="Harga Bangunan"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/harga_gudang" />
+                    android:id="@+id/harga_bangunan" />
 
                 <View
                     android:layout_width="match_parent"
@@ -108,10 +108,10 @@
                     android:paddingBottom="@dimen/input_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Luas Gudang"
+                    android:hint="Luas Bangunan"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/luas_gudang" />
+                    android:id="@+id/luas_bangunan" />
 
                 <View
                     android:layout_width="match_parent"
@@ -133,10 +133,10 @@
                     android:paddingBottom="@dimen/input_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="No IMB Gudang"
+                    android:hint="No IMB Bangunan"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/imb_gudang" />
+                    android:id="@+id/imb_bangunan" />
 
                 <View
                     android:layout_width="match_parent"
@@ -157,10 +157,34 @@
                     android:paddingBottom="@dimen/input_padding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Upload Foto Gudang"
+                    android:hint="Upload Foto Bangunan"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/foto_gudang" />
+                    android:id="@+id/foto_bangunan" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Status Layer"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/status_layer_bangunan" />
 
                 <View
                     android:layout_width="match_parent"
@@ -184,7 +208,7 @@
                     android:hint="Status Terjual"
                     android:singleLine="true"
                     android:background="@android:color/transparent"
-                    android:id="@+id/status_terjual_gudang" />
+                    android:id="@+id/status_terjual_bangunan" />
 
                 <View
                     android:layout_width="match_parent"

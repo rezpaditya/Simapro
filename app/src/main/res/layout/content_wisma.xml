@@ -12,4 +12,236 @@
     tools:context=".activity.WismaActivity"
     tools:showIn="@layout/activity_wisma">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Lokasi Tanah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/lokasi_tanah_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama Wisma"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/nama_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Harga Wisma"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/harga_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Luas Wisma"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/luas_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Upload Foto Fisik Bangunan"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/foto_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="No IMB Wisma"
+                    android:inputType="textMultiLine"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/imb_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Jenis Rumah"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/jenis_rumah_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Status Terjual"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/status_terjual_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:padding="@dimen/input_padding">
+
+                <EditText
+                    android:drawablePadding="@dimen/input_padding"
+                    android:paddingTop="@dimen/input_padding"
+                    android:paddingBottom="@dimen/input_padding"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Status Layak"
+                    android:singleLine="true"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/status_layak_wisma" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#ffe2e2e2" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 </RelativeLayout>

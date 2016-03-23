@@ -1,14 +1,11 @@
 package id.co.pln.simapro.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 
 import java.io.IOException;
@@ -25,26 +22,27 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class GudangActivity extends AppCompatActivity {
+public class BangunanActivity extends AppCompatActivity {
 
     boolean canAddItem = true;
 
     private String tanah_lokasi;
-    private String gudang_nama;
-    private String gudang_harga;
-    private String gudang_luas;
-    private String gudang_imb;
-    private String gudang_foto;
-    private String gudang_status_layer;
-    private String gudang_status_terjual;
+    private String bangunan_nama;
+    private String bangunan_harga;
+    private String bangunan_luas;
+    private String bangunan_imb;
+    private String bangunan_foto;
+    private String bangunan_status_layer;
+    private String bangunan_status_terjual;
 
-    @Bind(R.id.lokasi_tanah_gudang) EditText lokasi_tanah_gudang;
-    @Bind(R.id.nama_gudang) EditText nama_gudang;
-    @Bind(R.id.harga_gudang) EditText harga_gudang;
-    @Bind(R.id.luas_gudang) EditText luas_gudang;
-    @Bind(R.id.imb_gudang) EditText imb_gudang;
-    @Bind(R.id.foto_gudang) EditText foto_gudang;
-    @Bind(R.id.status_terjual_gudang) EditText status_terjual_gudang;
+    @Bind(R.id.lokasi_tanah_bangunan) EditText lokasi_tanah_bangunan;
+    @Bind(R.id.nama_bangunan) EditText nama_bangunan;
+    @Bind(R.id.harga_bangunan) EditText harga_bangunan;
+    @Bind(R.id.luas_bangunan) EditText luas_bangunan;
+    @Bind(R.id.imb_bangunan) EditText imb_bangunan;
+    @Bind(R.id.foto_bangunan) EditText foto_bangunan;
+    @Bind(R.id.status_layer_bangunan) EditText status_layer_bangunan;
+    @Bind(R.id.status_terjual_bangunan) EditText status_terjual_bangunan;
 
 
     private final OkHttpClient okHttpClient = new OkHttpClient();
@@ -52,7 +50,7 @@ public class GudangActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gudang);
+        setContentView(R.layout.activity_bangunan);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -93,23 +91,25 @@ public class GudangActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         //untuk mengahandle ketika tombol kirim ditekan
         if (id == R.id.action_kirim) {
-            tanah_lokasi = lokasi_tanah_gudang.getText().toString();
-            gudang_nama = nama_gudang.getText().toString();
-            gudang_harga = harga_gudang.getText().toString();
-            gudang_luas = luas_gudang.getText().toString();
-            gudang_imb = imb_gudang.getText().toString();
-            gudang_foto = foto_gudang.getText().toString();
-            gudang_status_terjual = status_terjual_gudang.getText().toString();
+            tanah_lokasi = lokasi_tanah_bangunan.getText().toString();
+            bangunan_nama = nama_bangunan.getText().toString();
+            bangunan_harga = harga_bangunan.getText().toString();
+            bangunan_luas = luas_bangunan.getText().toString();
+            bangunan_imb = imb_bangunan.getText().toString();
+            bangunan_foto = foto_bangunan.getText().toString();
+            bangunan_status_layer = status_layer_bangunan.getText().toString();
+            bangunan_status_terjual = status_terjual_bangunan.getText().toString();
 
             try {
                 RequestBody formBody = new FormBody.Builder()
                         .add("tanah_lokasi", tanah_lokasi)
-                        .add("gudang_nama", gudang_nama)
-                        .add("gudang_harga", gudang_harga)
-                        .add("gudang_luas", gudang_luas)
-                        .add("gudang_imb", gudang_imb)
-                        .add("gudang_foto", gudang_foto)
-                        .add("gudang_status_terjual", gudang_status_terjual)
+                        .add("bangunan_nama", bangunan_nama)
+                        .add("bangunan_harga", bangunan_harga)
+                        .add("bangunan_luas", bangunan_luas)
+                        .add("bangunan_imb", bangunan_imb)
+                        .add("bangunan_foto", bangunan_foto)
+                        .add("bangunan_status_layer", bangunan_status_layer)
+                        .add("bangunan_status_terjual", bangunan_status_terjual)
                         .build();
                 runOkhttp3(formBody);
             } catch (Exception e) {
@@ -127,7 +127,7 @@ public class GudangActivity extends AppCompatActivity {
 
 
         Request request = new Request.Builder()
-                .url(Config.INPUT_GUDANG)
+                .url(Config.INPUT_BANGUNAN)
                 .post(t)
                 .build();
 

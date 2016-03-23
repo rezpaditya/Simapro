@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activity.WismaActivity">
+    tools:context=".activity.BangunanActivity">
 
-    <include layout="@layout/content_wisma" />
+    <include layout="@layout/content_bangunan" />
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

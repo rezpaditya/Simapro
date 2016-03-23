@@ -68,7 +68,7 @@
             android:name=".activity.WismaActivity"
             android:label="Input Wisma" />
         <activity
-            android:name=".activity.KantorActivity"
+            android:name=".activity.BangunanActivity"
             android:label="Input Kantor" />
 
     </application>
